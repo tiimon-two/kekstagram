@@ -1,6 +1,5 @@
 import {getRandomPositiveInt, getRandomArrayElement} from './util.js';
 
-const ids = [];
 const PICTURES_COUNT = 25;
 const COMMENTS_COUNT = 3;
 const descriptions = ['Озеро', 'Лес', 'Солнечный день', 'Парк', 'Лунная ночь'];
@@ -9,22 +8,32 @@ const comments = ['Всё отлично!', 'В целом всё неплохо
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
-const commentsIds = [];
 const names = ['Артём', 'Сева', 'Любава', 'Добрыня', 'Семён'];
 
-const getUniqueId = (max, array) => {
-  let uniqueId;
-  do {
-    uniqueId = getRandomPositiveInt(1, max);
-  } while (array.includes(uniqueId));
+const getUniqueId = (max) => {
+  const previousValues = [];
 
-  array.push(uniqueId);
+  return function () {
+    let id = getRandomPositiveInt(1, max);
 
-  return uniqueId;
+    if (previousValues.length >= max) {
+      return null;
+    }
+
+    while (previousValues.includes(id)) {
+      id = getRandomPositiveInt(1, max);
+    }
+
+    previousValues.push(id);
+
+    return id;
+  };
 };
 
+const commentId = getUniqueId(135);
+
 const createComment = () => ({
-  id: getUniqueId(135, commentsIds),
+  id: commentId(),
   avatar: `img/avatar-${getRandomPositiveInt(1, 6)}.svg`,
   message: getRandomArrayElement(comments),
   name: getRandomArrayElement(names),
@@ -35,8 +44,10 @@ const getComments = () => {
   return commentsArray;
 };
 
+const pictureId = getUniqueId(25);
+
 const createPicture = () => {
-  const id = getUniqueId(25, ids);
+  const id = pictureId();
   const picture = {
     id: id,
     url: `photos/${id}.jpg`,
