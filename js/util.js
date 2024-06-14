@@ -1,6 +1,8 @@
-const checkStringLength = (string, maxLength) => string.length <= maxLength;
+function checkStringLength (string, maxLength) {
+  return string.length <= maxLength;
+}
 
-const getRandomPositiveInt = (min, max) => {
+function getRandomPositiveInt (min, max) {
 
   if (min === undefined && max === undefined) {
     min = 0;
@@ -33,8 +35,10 @@ const getRandomPositiveInt = (min, max) => {
   }
 
   return Math.floor(min + Math.random() * (max + 1 - min));
-};
+}
 
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInt(0, elements.length - 1)];
+function getRandomArrayElement (elements) {
+  return elements[getRandomPositiveInt(0, elements.length - 1)];
+}
 
 export {checkStringLength, getRandomArrayElement, getRandomPositiveInt};
