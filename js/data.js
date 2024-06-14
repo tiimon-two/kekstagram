@@ -1,9 +1,8 @@
 import {getRandomPositiveInt, getRandomArrayElement} from './util.js';
 
-const PICTURES_COUNT = 25;
 const COMMENTS_COUNT = 3;
-const descriptions = ['Озеро', 'Лес', 'Солнечный день', 'Парк', 'Лунная ночь'];
-const comments = ['Всё отлично!', 'В целом всё неплохо. Но не всё.',
+const DESCRIPTIONS = ['Озеро', 'Лес', 'Солнечный день', 'Парк', 'Лунная ночь'];
+const COMMENTS = ['Всё отлично!', 'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
@@ -35,7 +34,7 @@ const commentId = getUniqueId(135);
 const createComment = () => ({
   id: commentId(),
   avatar: `img/avatar-${getRandomPositiveInt(1, 6)}.svg`,
-  message: getRandomArrayElement(comments),
+  message: getRandomArrayElement(COMMENTS),
   name: getRandomArrayElement(names),
 });
 
@@ -51,7 +50,7 @@ const createPicture = () => {
   const picture = {
     id: id,
     url: `photos/${id}.jpg`,
-    description: getRandomArrayElement(descriptions),
+    description: getRandomArrayElement(DESCRIPTIONS),
     likes: getRandomPositiveInt(15, 200),
     comments: getComments(),
   };
@@ -59,8 +58,8 @@ const createPicture = () => {
   return picture;
 };
 
-const getPictures = () => {
-  const pictures = Array.from({length: PICTURES_COUNT}, createPicture);
+const getPictures = (count) => {
+  const pictures = Array.from({length: count}, createPicture);
   return pictures;
 };
 
