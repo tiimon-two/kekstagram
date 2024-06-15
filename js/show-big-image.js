@@ -40,18 +40,22 @@ function renderCommentsList (comments) {
   commentList.append(fragment);
 }
 
-function showBigImage ({url, likes, comments, description}) {
-  renderCommentsList(comments);
-  bigPictureContainer.classList.remove('hidden');
+function renderPictureDetails ({url, likes, comments, description}) {
   bigPicture.src = url;
   bigPictureContainer.querySelector('.likes-count').textContent = likes;
   bigPictureContainer.querySelector('.comments-count').textContent = comments.length;
   bigPictureContainer.querySelector('.social__caption').textContent = description;
   commentCount.classList.add('hidden');
   imageLoader.classList.add('hidden');
+}
+
+function showBigImage (picture) {
+  renderCommentsList(picture.comments);
+  bigPictureContainer.classList.remove('hidden');
   document.body.classList.add('modal-open');
   escButton.addEventListener('click', closeBigPicture);
   document.addEventListener('keydown', pressEsc);
+  renderPictureDetails(picture);
 }
 
 export {showBigImage};
