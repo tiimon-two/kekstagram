@@ -9,14 +9,16 @@ const escButton = document.querySelector('.big-picture__cancel');
 const closeBigPicture = () => {
   document.body.classList.remove('modal-open');
   bigPictureContainer.classList.add('hidden');
+  escButton.removeEventListener('click', closeBigPicture);
+  document.removeEventListener('keydown', pressEscHandler);
 };
 
-const checkPressEsc = (e) => {
+function pressEscHandler  (e) {
   if (e.key === 'Escape') {
     e.preventDefault();
     closeBigPicture();
   }
-};
+}
 
 const renderComment = ({avatar, name, message}) => {
   const commentElement = commentTemplate.cloneNode(true);
@@ -51,8 +53,8 @@ const showBigImage = (picture) => {
   renderCommentsList(picture.comments);
   bigPictureContainer.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  escButton.addEventListener('click', closeBigPicture, {once: true});
-  document.addEventListener('keydown', checkPressEsc, {once: true});
+  escButton.addEventListener('click', closeBigPicture);
+  document.addEventListener('keydown', pressEscHandler);
   renderPictureDetails(picture);
 };
 
