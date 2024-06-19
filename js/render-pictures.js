@@ -2,7 +2,7 @@ import { showBigImage } from './show-big-image.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-function createPicture (picture) {
+const createPicture = (picture) => {
   const {url, likes, comments} = picture;
   const pictureElement = pictureTemplate.cloneNode(true);
   pictureElement.querySelector('img').src = url;
@@ -14,9 +14,9 @@ function createPicture (picture) {
   });
 
   return pictureElement;
-}
+};
 
-function renderPictures (pictures) {
+const renderPictures = (pictures) => {
   const picturesContainer = document.querySelector('.pictures');
   const fragment = document.createDocumentFragment();
 
@@ -25,6 +25,6 @@ function renderPictures (pictures) {
   });
 
   picturesContainer.append(fragment);
-}
+};
 
 export {renderPictures};
