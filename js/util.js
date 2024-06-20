@@ -35,6 +35,8 @@ const getRandomPositiveInt = (min, max) => {
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
 
+const escButtonHandler = (e) => e.key === 'Escape';
+
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInt(0, elements.length - 1)];
 
-export {checkStringLength, getRandomArrayElement, getRandomPositiveInt};
+export {checkStringLength, getRandomArrayElement, getRandomPositiveInt, escButtonHandler};

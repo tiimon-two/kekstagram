@@ -1,3 +1,5 @@
+import { escButtonHandler } from './util.js';
+
 const bigPictureContainer = document.querySelector('.big-picture');
 const bigPicture = document.querySelector('.big-picture__img').querySelector('img');
 const commentTemplate = bigPictureContainer.querySelector('.social__comment');
@@ -10,11 +12,11 @@ const closeBigPicture = () => {
   document.body.classList.remove('modal-open');
   bigPictureContainer.classList.add('hidden');
   escButton.removeEventListener('click', closeBigPicture);
-  document.removeEventListener('keydown', pressEscHandler);
+  document.removeEventListener('keydown', closeButtonHandler);
 };
 
-function pressEscHandler  (e) {
-  if (e.key === 'Escape') {
+function closeButtonHandler  (e) {
+  if (escButtonHandler) {
     e.preventDefault();
     closeBigPicture();
   }
@@ -54,7 +56,7 @@ const showBigImage = (picture) => {
   bigPictureContainer.classList.remove('hidden');
   document.body.classList.add('modal-open');
   escButton.addEventListener('click', closeBigPicture);
-  document.addEventListener('keydown', pressEscHandler);
+  document.addEventListener('keydown', closeButtonHandler);
   renderPictureDetails(picture);
 };
 
