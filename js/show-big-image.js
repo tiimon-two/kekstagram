@@ -8,19 +8,7 @@ const commentCount = document.querySelector('.social__comment-count');
 const imageLoader = document.querySelector('.comments-loader');
 const escButton = document.querySelector('.big-picture__cancel');
 
-const closeBigPicture = () => {
-  document.body.classList.remove('modal-open');
-  bigPictureContainer.classList.add('hidden');
-  escButton.removeEventListener('click', closeBigPicture);
-  document.removeEventListener('keydown', closeButtonHandler);
-};
-
-function closeButtonHandler  (e) {
-  if (escButtonHandler) {
-    e.preventDefault();
-    closeBigPicture();
-  }
-}
+let commentsCallback;
 
 const renderComment = ({avatar, name, message}) => {
   const commentElement = commentTemplate.cloneNode(true);
@@ -31,33 +19,70 @@ const renderComment = ({avatar, name, message}) => {
   return commentElement;
 };
 
-const renderCommentsList = (comments) => {
+const renderCommentsList = (comments, count) => {
   commentList.innerHTML = '';
   const fragment = document.createDocumentFragment();
 
-  comments.forEach((comment) => {
-    fragment.append(renderComment(comment));
-  });
+  for (let i = 0; i < count; i++) {
+    fragment.append(renderComment(comments[i]));
+  }
 
   commentList.append(fragment);
 };
 
-const renderPictureDetails = ({url, likes, comments, description}) => {
+
+const getAnohterComments = (comments, count) => {
+  renderCommentsList(comments, count);
+  commentCount.innerHTML = `${count} из <span class="comments-count">${comments.length}</span> комментариев`;
+};
+
+const closeBigPicture = () => {
+  document.body.classList.remove('modal-open');
+  bigPictureContainer.classList.add('hidden');
+  escButton.removeEventListener('click', closeBigPicture);
+  document.removeEventListener('keydown', closeButtonHandler);
+  imageLoader.removeEventListener('click', commentsCallback);
+};
+
+function closeButtonHandler  (e) {
+  if (escButtonHandler(e)) {
+    e.preventDefault();
+    closeBigPicture();
+  }
+}
+
+const renderPictureDetails = ({url, likes, comments, description}, count) => {
   bigPicture.src = url;
   bigPictureContainer.querySelector('.likes-count').textContent = likes;
   bigPictureContainer.querySelector('.comments-count').textContent = comments.length;
   bigPictureContainer.querySelector('.social__caption').textContent = description;
-  commentCount.classList.add('hidden');
-  imageLoader.classList.add('hidden');
+  commentCount.querySelector('.comments-count').textContent = comments.length;
+  commentCount.innerHTML = `${count} из <span class="comments-count">${comments.length}</span> комментариев`;
 };
 
 const showBigImage = (picture) => {
-  renderCommentsList(picture.comments);
+  let count = 5;
+  renderCommentsList(picture.comments, count);
   bigPictureContainer.classList.remove('hidden');
   document.body.classList.add('modal-open');
   escButton.addEventListener('click', closeBigPicture);
   document.addEventListener('keydown', closeButtonHandler);
-  renderPictureDetails(picture);
+  renderPictureDetails(picture, count);
+  imageLoader.classList.remove('hidden');
+  commentsCallback = () => {
+    if (picture.comments.length - (count + 5) >= 0) {
+      count += 5;
+    } else {
+      count += picture.comments.length - count;
+    }
+    if (picture.comments.length - count === 0) {
+      imageLoader.classList.add('hidden');
+    } else {
+      imageLoader.classList.remove('hidden');
+    }
+    getAnohterComments(picture.comments, count);
+  };
+  imageLoader.addEventListener('click', commentsCallback);
 };
 
 export {showBigImage};
