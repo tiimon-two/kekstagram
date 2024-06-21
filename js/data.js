@@ -1,6 +1,6 @@
 import {getRandomPositiveInt, getRandomArrayElement} from './util.js';
 
-const COMMENTS_COUNT = 3;
+const COMMENTS_COUNT = 12;
 const DESCRIPTIONS = ['Озеро', 'Лес', 'Солнечный день', 'Парк', 'Лунная ночь'];
 const COMMENTS = ['Всё отлично!', 'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
