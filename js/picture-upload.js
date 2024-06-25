@@ -1,3 +1,4 @@
+import { resetSlider, slider } from './slider.js';
 import { escButtonHandler } from './util.js';
 
 const uploadInput = document.querySelector('#upload-file');
@@ -67,6 +68,7 @@ const closeForm = () => {
   document.removeEventListener('keydown', closeButtonHandler);
   hashtags.removeEventListener('input', checkHashtag);
   comment.removeEventListener('input', checkComment);
+  resetSlider();
 };
 
 function closeButtonHandler (e) {
@@ -89,7 +91,8 @@ const openForm = () => {
 };
 
 const pictureUpload = () => {
-  uploadInput.addEventListener('change', openForm);
+  uploadInput.addEventListener('input', openForm);
+  slider();
 };
 
 export {pictureUpload};
