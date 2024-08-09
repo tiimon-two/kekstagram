@@ -61,7 +61,7 @@ const renderPictureDetails = ({url, likes, comments, description}, count) => {
 };
 
 const showBigImage = (picture) => {
-  let count = 5;
+  let count = picture.comments.length >= 5 ? 5 : picture.comments.length;
   renderCommentsList(picture.comments, count);
   bigPictureContainer.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -69,6 +69,11 @@ const showBigImage = (picture) => {
   document.addEventListener('keydown', closeButtonHandler);
   renderPictureDetails(picture, count);
   imageLoader.classList.remove('hidden');
+  if ((picture.comments.length - count) === 0) {
+    imageLoader.classList.add('hidden');
+  } else {
+    imageLoader.classList.remove('hidden');
+  }
   commentsCallback = () => {
     if (picture.comments.length - (count + 5) >= 0) {
       count += 5;

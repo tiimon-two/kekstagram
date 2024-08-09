@@ -1,5 +1,5 @@
-import { resetSlider, slider } from './slider.js';
-import { escButtonHandler } from './util.js';
+import { sendData } from './picture-data.js';
+import { initSizeButton, resetSlider, slider } from './slider.js';
 
 const uploadInput = document.querySelector('#upload-file');
 const editForm = document.querySelector('.img-upload__overlay');
@@ -8,9 +8,54 @@ const closeFormButton = document.querySelector('#upload-cancel');
 const hashtags = document.querySelector('.text__hashtags');
 const comment = document.querySelector('.text__description');
 const uploadButton = document.querySelector('.img-upload__submit');
+const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+const successMessage = successMessageTemplate.cloneNode(true);
+const errorMessage = errorMessageTemplate.cloneNode(true);
+const successButton = successMessage.querySelector('.success__button');
+const errorButton = errorMessage.querySelector('.error__button');
 
-const submitForm = (e) => {
+const removeSuccessMessage = () => {
+  document.body.removeChild(successMessage);
+  document.removeEventListener('keydown', escButtonHandler);
+  successButton.removeEventListener('click', removeSuccessMessage);
+};
+
+const removeErrorMessage = () => {
+  document.body.removeChild(errorMessage);
+  document.removeEventListener('keydown', escButtonHandler);
+  errorButton.removeEventListener('click', removeErrorMessage);
+};
+
+function escButtonHandler (e) {
+  if (e.key === 'Escape') {
+    if (document.body.contains(successMessage)) {
+      removeSuccessMessage();
+    } else {
+      removeErrorMessage();
+    }
+  }
+}
+
+const onSendDataSuccess = () => {
+  uploadForm.reset();
+  closeForm();
+  document.body.append(successMessage);
+  successButton.addEventListener('click', removeSuccessMessage);
+  document.addEventListener('keydown', escButtonHandler);
+};
+
+
+const onSendDataError = () => {
+  document.body.append(errorMessage);
+  errorButton.addEventListener('click', removeErrorMessage);
+  document.addEventListener('keydown', escButtonHandler);
+};
+
+const submitForm = async (e) => {
   e.preventDefault();
+  const data = new FormData(uploadForm);
+  await sendData(onSendDataSuccess, onSendDataError, data);
 };
 
 
@@ -59,7 +104,19 @@ const checkComment = () => {
   }
   comment.reportValidity();
 };
-const closeForm = () => {
+
+const openForm = () => {
+  initSizeButton();
+  editForm.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  closeFormButton.addEventListener('click', closeForm);
+  uploadForm.addEventListener('submit', submitForm);
+  document.addEventListener('keydown', closeButtonHandler);
+  hashtags.addEventListener('input', checkHashtag);
+  comment.addEventListener('input', checkComment);
+};
+
+function closeForm () {
   editForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
   closeFormButton.removeEventListener('click', closeForm);
@@ -69,7 +126,7 @@ const closeForm = () => {
   hashtags.removeEventListener('input', checkHashtag);
   comment.removeEventListener('input', checkComment);
   resetSlider();
-};
+}
 
 function closeButtonHandler (e) {
   if (escButtonHandler(e) && !isTextFieldsActive(e)) {
@@ -79,16 +136,6 @@ function closeButtonHandler (e) {
   }
 }
 
-
-const openForm = () => {
-  editForm.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-  closeFormButton.addEventListener('click', closeForm);
-  uploadForm.addEventListener('submit', submitForm);
-  document.addEventListener('keydown', closeButtonHandler);
-  hashtags.addEventListener('input', checkHashtag);
-  comment.addEventListener('input', checkComment);
-};
 
 const pictureUpload = () => {
   uploadInput.addEventListener('input', openForm);

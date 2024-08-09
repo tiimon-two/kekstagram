@@ -10,7 +10,9 @@ const STEP = 25;
 const DEFAULT_SIZE = 100;
 let activeEffect = '';
 
+
 const slider = () => {
+  initSizeButton();
   effectSlider.classList.add('hidden');
   noUiSlider.create(effectSlider, {
     range: {
@@ -143,23 +145,47 @@ const scaleImage = () => {
   img.style.transform = `scale(${imageSize.value / DEFAULT_SIZE})`;
 };
 
-smallerButton.addEventListener('click', () => {
+const reduseImage = () => {
   if (imageSize.value > STEP) {
     imageSize.value -= STEP;
     scaleImage();
   }
-});
+};
 
-biggerButton.addEventListener('click', () => {
+const increaseImage = () => {
   if (imageSize.value < DEFAULT_SIZE) {
     imageSize.value = Number(imageSize.value) + STEP;
     scaleImage();
   }
-});
+};
+
+function initSizeButton () {
+  smallerButton.addEventListener('click', reduseImage);
+  biggerButton.addEventListener('click', increaseImage);
+  imageSize.value = 100;
+}
 
 const resetSlider = () => {
   imageSize.value = DEFAULT_SIZE;
   scaleImage();
+  smallerButton.removeEventListener('click', reduseImage);
+  biggerButton.removeEventListener('click', increaseImage);
+  effectSlider.noUiSlider.updateOptions({
+    range: {
+      min: 0,
+      max: 1,
+    },
+    start: 1,
+    step: 0.1
+  });
+  img.classList.remove('effects__preview--chrome');
+  img.classList.remove('effects__preview--sepia');
+  img.classList.remove('effects__preview--marvin');
+  img.classList.remove('effects__preview--phobos');
+  img.classList.remove('effects__preview--heat');
+  img.classList.remove('effects__preview--heat');
+  img.classList.remove('effects__preview--none');
+  img.style = '';
 };
 
-export {slider, resetSlider};
+export {slider, resetSlider, initSizeButton};
