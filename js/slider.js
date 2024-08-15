@@ -11,7 +11,7 @@ const DEFAULT_SIZE = 100;
 let activeEffect = '';
 
 
-const slider = () => {
+const setSlider = () => {
   initSizeButton();
   effectSlider.classList.add('hidden');
   noUiSlider.create(effectSlider, {
@@ -188,4 +188,4 @@ const resetSlider = () => {
   img.style = '';
 };
 
-export {slider, resetSlider, initSizeButton};
+export {setSlider, resetSlider, initSizeButton};

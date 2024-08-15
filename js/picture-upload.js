@@ -1,5 +1,5 @@
 import { sendData } from './picture-data.js';
-import { initSizeButton, resetSlider, slider } from './slider.js';
+import { initSizeButton, resetSlider, setSlider } from './slider.js';
 
 const uploadInput = document.querySelector('#upload-file');
 const editForm = document.querySelector('.img-upload__overlay');
@@ -14,6 +14,8 @@ const successMessage = successMessageTemplate.cloneNode(true);
 const errorMessage = errorMessageTemplate.cloneNode(true);
 const successButton = successMessage.querySelector('.success__button');
 const errorButton = errorMessage.querySelector('.error__button');
+const uploadImage = document.querySelector('.img-upload__preview img');
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const removeSuccessMessage = () => {
   document.body.removeChild(successMessage);
@@ -105,7 +107,7 @@ const checkComment = () => {
   comment.reportValidity();
 };
 
-const openForm = () => {
+const openForm = (e) => {
   initSizeButton();
   editForm.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -114,6 +116,14 @@ const openForm = () => {
   document.addEventListener('keydown', closeButtonHandler);
   hashtags.addEventListener('input', checkHashtag);
   comment.addEventListener('input', checkComment);
+  const file = e.target.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    uploadImage.src = URL.createObjectURL(file);
+  }
 };
 
 function closeForm () {
@@ -139,7 +149,7 @@ function closeButtonHandler (e) {
 
 const pictureUpload = () => {
   uploadInput.addEventListener('input', openForm);
-  slider();
+  setSlider();
 };
 
 export {pictureUpload};

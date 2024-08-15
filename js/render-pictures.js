@@ -1,6 +1,7 @@
 import { showBigImage } from './show-big-image.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const picturesContainer = document.querySelector('.pictures');
 
 const createPicture = (picture) => {
   const {url, likes, comments} = picture;
@@ -17,7 +18,6 @@ const createPicture = (picture) => {
 };
 
 const renderPictures = (pictures) => {
-  const picturesContainer = document.querySelector('.pictures');
   const fragment = document.createDocumentFragment();
 
   pictures.forEach((picture) => {
@@ -27,4 +27,13 @@ const renderPictures = (pictures) => {
   picturesContainer.append(fragment);
 };
 
-export {renderPictures};
+const clearPictures = () => {
+  for (let i = 0; i < picturesContainer.children.length; i++){
+    if (picturesContainer.children[i].classList.contains('picture')) {
+      picturesContainer.removeChild(picturesContainer.children[i]);
+      i--;
+    }
+  }
+};
+
+export {renderPictures, clearPictures};

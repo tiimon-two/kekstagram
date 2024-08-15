@@ -39,4 +39,27 @@ const escButtonHandler = (e) => e.key === 'Escape';
 
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInt(0, elements.length - 1)];
 
-export {checkStringLength, getRandomArrayElement, getRandomPositiveInt, escButtonHandler};
+const debounse = (cb, timeoutDelay = 500) =>  {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => cb.apply (this, rest), timeoutDelay);
+  };
+};
+
+const trottle = (cb, delayBetweenFrames) => {
+  let lastTime = 0;
+
+  return (...rest) => {
+    const now = new Date();
+
+    if (now - lastTime >= delayBetweenFrames) {
+      cb.apply(this, rest);
+      lastTime = now;
+    }
+  };
+};
+
+export {checkStringLength, getRandomArrayElement, getRandomPositiveInt, escButtonHandler, debounse, trottle};
